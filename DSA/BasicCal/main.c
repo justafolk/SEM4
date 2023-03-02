@@ -18,14 +18,15 @@ int main(){
 
   List operators = (List) malloc(sizeof(Node));
   operators->data = INT_MIN;
+  char a[50];
 
+  List *L = (List* ) malloc(sizeof(Node *)*25);
   char* input = NULL;
   size_t size = 0;
 
   printf("Enter a string: ");
   getline(&input, &size, stdin);
   int len = strlen(input);
-  List *L = (List* ) malloc(sizeof(Node *)*25);
 
   int i = 0;
   int index = 0;
@@ -33,10 +34,13 @@ int main(){
   L[0] = (List) malloc(sizeof(Node ));
   L[0]->data = INT_MIN;
   List temp = L[0];
+
   while(i < len){
     if(isnumeric(input[i])){
       push(&temp, input[i] - '0');
     } else{
+      a[index] = '0'+index;
+
       push(&operators, input[i]);
       index++;
       L[index] = (List) malloc(sizeof(Node ));
@@ -45,6 +49,18 @@ int main(){
     }
     i++;
   }
+  a[index+1] = '0'+index;
+
+  i = 0;
+  printf("\n");
+  while (i<index){
+
+    printf("%c->", a[i]);
+    i++;
+  }
+  printf("\n");
+  displayList(&L[3]);
+
   displayList(&L[0]);
   displayList(&L[1]);
   reverse(&L[0]);
