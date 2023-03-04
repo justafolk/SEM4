@@ -5,7 +5,6 @@
 char s[250];
 int top = -1; /* Global declarations */
 
-/* Function to remove spaces from given string */
 void RemoveSpaces(char* source) {
 	char* i = source;
 	char* j = source;
@@ -17,17 +16,14 @@ void RemoveSpaces(char* source) {
 	*i = 0;
 }
 
-/* Function for PUSH operation */
 void push(char elem) { 
 	s[++top] = elem;
 }
 
-/* Function for POP operation */
 char pop() { 
 	return (s[top--]);
 }
 
-/* Function for precedence */
 int pr(char elem) { 
 	switch (elem) {
 		case '#':
@@ -43,9 +39,6 @@ int pr(char elem) {
 	}
 }
 
-/*
-* Function to convert from infix to postfix expression
-*/
 void infix_to_postfix(char *infix, char *postfix) {
 	char ch, elem;
 	int i = 0, k = 0;
@@ -105,14 +98,13 @@ int eval_postfix(char *postfix) {
 	return s[top];
 }
 
-int main() { /* Main Program */
-	
-	char infx[50], pofx[50];
-	printf("\nInput the infix expression: ");
-	fgets(infx, 50, stdin);
-	
-	infix_to_postfix(infx, pofx);
-
-	top = -1;
-	printf("\nResult of evaluation of postfix expression : %d", eval_postfix(pofx));
-}
+// int main() { 	
+//   char infx[50], pofx[50];
+//   printf("\nInput the infix expression: ");
+//   fgets(infx, 50, stdin);
+//   
+//   infix_to_postfix(infx, pofx);
+//
+//   top = -1;
+//   printf("\nResult of evaluation of postfix expression : %d", eval_postfix(pofx));
+// }

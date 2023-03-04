@@ -27,6 +27,20 @@ void push(List *L, int data){
 
 }
 
+void displayListc(List *L){
+
+  List temp = *L;
+
+  printf("\n");
+
+  while(temp != NULL){
+
+    printf("%c",temp->data );
+    temp = temp->next;
+  }
+  printf("\n");
+
+}
 void displayList(List *L){
 
   List temp = *L;
