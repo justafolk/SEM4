@@ -15,6 +15,7 @@ int isnumeric(char s){
   return 0;
 }
 
+Number **L;
 
 int main(){
 
@@ -39,7 +40,7 @@ int main(){
 
   char infix[c*3];
   i = 0;
-  Number **L = (Number** ) malloc(sizeof(Number *)*(12));
+  L = (Number **) malloc(sizeof(Number *)*(12));
   int index = 0;
 
   L[0] = (Number *) malloc(sizeof(Number ));
@@ -65,6 +66,8 @@ int main(){
       L[index]->count ++;
 
     } else if (input[i] == '('){
+      if (input[i+1] == '+' || input[i+1] == '-' ){
+      }
 
       push(&operators, input[i]);
     }
@@ -74,7 +77,6 @@ int main(){
       c++;
     }
     else{
-
       push(&operators, '0'+c);
       if (input[i] == '-' || input[i] == '+'){
         push(&operators, '+');
@@ -129,7 +131,7 @@ int main(){
   char postfix[50];
   infix_to_postfix(infix, postfix);
 
-  printf("%s", postfix);
+  printf("%s\n", postfix);
 
     int rest = eval_postfix(postfix, L);
   printf("%c", L[rest]->sign);

@@ -83,7 +83,10 @@ void solve(int op1, int op2, char ch, Number **L){
       pushStack(addLists(L, op1, op2, L[op1]->sign));
       break;
     case '-' : 
-      if (L[op1]->count >= L[op2]->count || (L[op1]->numbers->data > L[op2]->numbers->data)) {
+      if (L[op1]->count > L[op2]->count ) {
+        pushStack(subLists(L, op1, op2, L[op1]->sign));
+
+      } else if ( L[op1]->count == L[op2]->count && (L[op1]->numbers->data > L[op2]->numbers->data)) {
         pushStack(subLists(L, op1, op2, L[op1]->sign));
 
       } else if (L[op1]->count >= L[op2]->count && (L[op1]->numbers->data < L[op2]->numbers->data)) {

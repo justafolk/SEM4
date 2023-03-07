@@ -5,6 +5,7 @@
 
 int addLists(Number **L, int L1, int L2, char sign){
 
+  printf("Adding %d with %d\n", L1, L2);
   List temp1 = L[L1]->numbers;
   List temp2 = L[L2]->numbers;
 
@@ -52,6 +53,8 @@ int addLists(Number **L, int L1, int L2, char sign){
   }
 
   L[L1] = ret;
+
+  //displayNumbers(L, 4);
   return L1;
 }
 
@@ -59,7 +62,7 @@ int subLists(Number **L, int L1, int L2, char sign){
 
 
   printf("Subtracting %d with %d", L1, L2);
- List temp1 = L[L1]->numbers;
+   List temp1 = L[L1]->numbers;
   List temp2 = L[L2]->numbers;
 
   Number *ret = (Number *) malloc(sizeof(Number));
@@ -127,6 +130,8 @@ int subLists(Number **L, int L1, int L2, char sign){
 
   printf("\nans: %c", L[L1]->sign);
   displayList(&L[L1]->numbers);
+
+  // displayNumbers(L, 4);
   return L1;
 
 }
