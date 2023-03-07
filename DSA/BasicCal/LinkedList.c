@@ -27,6 +27,18 @@ void push(List *L, int data){
 
 }
 
+
+void displayNumbers(Number **L, int len){
+  int i = 0;
+
+  while(i < len){
+    printf("\nnumber %d: %c", i+1, L[i]->sign );
+    displayList(&L[i]->numbers);
+    i++;
+
+  }
+}
+
 void displayListc(List *L){
 
   List temp = *L;
@@ -45,7 +57,6 @@ void displayList(List *L){
 
   List temp = *L;
 
-  printf("\n");
 
   while(temp != NULL){
 

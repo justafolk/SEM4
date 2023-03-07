@@ -5,8 +5,10 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include "./infix.h"
 
 int isnumeric(char s){
+
   if (s - '0' >= 0 && s - '0' <= 9){
     return 1;
   }
@@ -35,9 +37,9 @@ int main(){
     i++;
   }
 
-  char a[c+c];
+  char infix[c*3];
   i = 0;
-  Number **L = (Number** ) malloc(sizeof(Number *)*c);
+  Number **L = (Number** ) malloc(sizeof(Number *)*(12));
   int index = 0;
 
   L[0] = (Number *) malloc(sizeof(Number ));
@@ -54,13 +56,14 @@ int main(){
     L[0]->sign = '+';
   }
 
+  while(input[i]=='0'){i++;}
   c = 0;
 
   while(input[i] != '\n'){
     if(isnumeric(input[i])){
       push(&temp, input[i] - '0');
-
       L[index]->count ++;
+
     } else if (input[i] == '('){
 
       push(&operators, input[i]);
@@ -73,18 +76,30 @@ int main(){
     else{
 
       push(&operators, '0'+c);
-      push(&operators, input[i]);
+      if (input[i] == '-' || input[i] == '+'){
+        push(&operators, '+');
+      }
+      else {
+        push(&operators, input[i]);
+      }
+
       c++;
       reverse(&L[index]->numbers);
       index++;
       L[index] = (Number *) malloc(sizeof(Number ));
 
-      if((input[i+1] == '+') || (input[i+1] == '-')){
-        L[index]->sign = input[0];
+      if((input[i+1] == '+') || (input[i+1] == '-') ){
+        L[index]->sign = input[i+1];
         i++;
       } else{
         L[index]->sign = '+';
       }
+
+      if (input[i] == '-'){
+        L[index]->sign = input[i];
+      }
+
+      while(input[i]=='0'){i++;}
 
       L[index]->numbers = (Node *) malloc(sizeof(Node));
       L[index]->numbers->data = INT_MIN;
@@ -94,33 +109,30 @@ int main(){
     i++;
   }
 
-  printf("%d", L[0]->count);
   if(input[i-1] != ')'){
       push(&operators, '0'+c);
+      reverse(&L[index]->numbers);
   }
-
-
   i = 0;
-  printf("%c ->%c", L[0]->sign, L[1]->sign);
-  printf("\n");
-  while (i<index){
 
-    printf("%c->", a[i]);
+
+  while(operators->next != NULL){
+    infix[i] = operators->data;
+    operators = operators->next;
     i++;
   }
-  printf("\n");
+  infix[i] = operators->data;
+  infix[++i] = '\n';
 
-  displayListc(&operators);
-  printf("\n\n");
-  reverse(&L[1]->numbers);
-  displayList(&L[0]->numbers);
-  displayList(&L[1]->numbers);
+  displayNumbers(L, c+1);
 
-  L[2] = (Number *) malloc(sizeof(Number));
-  L[2] = addLists(L[0], L[1]);
-  reverse(&L[2]->numbers);
-  displayList(&L[2]->numbers);
+  char postfix[50];
+  infix_to_postfix(infix, postfix);
 
-  printf("The string entered is: %s\n", input);
+  printf("%s", postfix);
+
+    int rest = eval_postfix(postfix, L);
+  printf("%c", L[rest]->sign);
+  displayList(&L[rest]->numbers);
 
 }

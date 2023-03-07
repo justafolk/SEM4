@@ -24,7 +24,9 @@ int pop(List *L);
 void reverse(struct Node** head_ref);
 void displayLists(Lists **L);
 
-Number *addLists(Number *L1, Number *L2);
-Node *subLists(List *L1, List *L2);
-Node *mulLists(List *L1, List *L2);
-Node *divLists(List *L1, List *L2);
+int addLists(Number **L, int L1, int L2, char sign);
+
+int subLists(Number **L, int L1, int L2, char sign);
+
+int mulLists(Number **L, int L1, int L2, char sign);
+int divLists(Number **L, int L1, int L2, char sign);
