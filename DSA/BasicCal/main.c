@@ -19,7 +19,8 @@ Number **L;
 
 int main(){
 
-  List operators = NULL;
+  List operators = (List) malloc(sizeof(Node));
+  operators->data = INT_MIN;
 
   char* input = NULL;
   size_t size = 0;
@@ -43,8 +44,11 @@ int main(){
   int index = 0;
 
   L[0] = (Number *) malloc(sizeof(Number ));
-  L[0]->numbers = NULL;
+  L[0]->numbers = (Node *) malloc(sizeof(Node));
+  L[0]->numbers->data = INT_MIN;
+  L[0]->numbers->next = NULL;
   L[0]->count = 0;
+  List temp = L[0]->numbers;
 
   if((input[0] == '+') || (input[0] == '-')){
     L[0]->sign = input[0];
@@ -54,11 +58,13 @@ int main(){
   }
 
   while(input[i]=='0'){i++;}
+  if(!isnumeric(input[i+1]))
+    i--;
   c = 0;
 
   while(input[i] != '\n'){
     if(isnumeric(input[i])){
-      push(&L[index]->numbers, input[i] - '0');
+      push(&temp, input[i] - '0');
       L[index]->count ++;
 
     } else if (input[i] == '('){
@@ -98,8 +104,13 @@ int main(){
       }
 
       while(input[i]=='0'){i++;}
+      if(!isnumeric(input[i+1]))
+        i--;
 
-      L[index]->numbers = NULL;
+      L[index]->numbers = (Node *) malloc(sizeof(Node));
+      L[index]->numbers->data = INT_MIN;
+      L[index]->numbers->next = NULL;
+      temp = L[index]->numbers;
     }
     i++;
   }
@@ -110,7 +121,6 @@ int main(){
   }
   i = 0;
 
-
   while(operators->next != NULL){
     infix[i] = operators->data;
     operators = operators->next;
@@ -118,19 +128,18 @@ int main(){
   }
   infix[i] = operators->data;
   infix[++i] = '\n';
-  L[0] = L[subLists(L, 0, 1, '+')];
 
-  printf("FICK");
-  displayList(&L[0]->numbers);
-  printf("FICK");
+  mulLists(L, 0, 1, '+');
 
-  char postfix[50];
-  infix_to_postfix(infix, postfix);
-
-  printf("%s\n", postfix);
-
-    int rest = eval_postfix(postfix, L);
-  printf("%c", L[rest]->sign);
-  displayList(&L[rest]->numbers);
+  reverse(&L[1]->numbers);
+  displayList(&L[1]->numbers);
+// char postfix[50];
+// infix_to_postfix(infix, postfix);
+//
+// printf("%s\n", postfix);
+//
+//   int rest = eval_postfix(postfix, L);
+// printf("%c", L[rest]->sign);
+// displayList(&L[rest]->numbers);
 
 }

@@ -6,16 +6,17 @@
 
 void push(List *L, int data){
 
+  List temp = *L;
+  if (temp->data == INT_MIN){
+    temp->data = data;
+    temp->next = NULL;
+    return;
+
+  }
+
   Node *newNode = (Node *) malloc(sizeof(Node));
   newNode->data = data;
   newNode->next = NULL;
-
-  if (*L == NULL){
-    *L = newNode;
-    return;
-  }
-
-  List temp = *L;
 
   while(temp->next != NULL){
     temp = temp->next;

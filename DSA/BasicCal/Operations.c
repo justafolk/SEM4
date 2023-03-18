@@ -5,7 +5,6 @@
 
 int addLists(Number **L, int L1, int L2, char sign){
 
-  printf("Adding %d with %d\n", L1, L2);
   List temp1 = L[L1]->numbers;
   List temp2 = L[L2]->numbers;
 
@@ -52,16 +51,15 @@ int addLists(Number **L, int L1, int L2, char sign){
     push(&ret->numbers, carry);
   }
 
-  L[L1] = ret;
+  L[L2] = ret;
 
   //displayNumbers(L, 4);
-  return L1;
+  return L2;
 }
 
 int subLists(Number **L, int L1, int L2, char sign){
 
 
-  printf("Subtracting %d with %d", L1, L2);
   List temp1 = L[L1]->numbers;
   List temp2 = L[L2]->numbers;
 
@@ -78,11 +76,15 @@ int subLists(Number **L, int L1, int L2, char sign){
   int borrow = 0;
 
   while(temp1 != NULL && temp2 != NULL){
-    printf("temp1:%d\ttemp2:%d", temp1->data, temp2->data);
 
     if(temp1->data < temp2->data){
       temp1->data=(temp1->data+10)-borrow;
       borrow = 1;
+    }
+  else if (temp1->data == temp2->data && borrow){
+      temp1->data=(temp1->data+10)-borrow;
+      borrow = 1;
+
     }
   else{
       temp1->data = (temp1->data)-borrow;
@@ -98,13 +100,18 @@ int subLists(Number **L, int L1, int L2, char sign){
     temp1 = temp1->next;
     temp2 = temp2->next;
 
-    printf("carry:%d\tborrow:%d\n", carry, borrow);
   }
 
 
   while(temp1 != NULL ){
-    temp1->data = (temp1->data)-borrow;
-    borrow = 0;
+    if(temp1->data < borrow){
+      temp1->data=(temp1->data+10)-borrow;
+      borrow = 1;
+    }
+  else{
+      temp1->data = (temp1->data)-borrow;
+      borrow = 0;
+    }
     sum = temp1->data + carry;
     push(&ret->numbers, sum%10);
     carry = sum / 10;
@@ -113,8 +120,14 @@ int subLists(Number **L, int L1, int L2, char sign){
     temp1 = temp1->next;
   }
   while(temp2 != NULL ){
-    temp2->data = (temp2->data)-borrow;
-    borrow = 0;
+    if(temp2->data < borrow){
+      temp2->data=(temp2->data+10)-borrow;
+      borrow = 1;
+    }
+  else{
+      temp2->data = (temp2->data)-borrow;
+      borrow = 0;
+    }
     sum = temp2->data + carry;
     push(&ret->numbers, sum%10);
     carry = sum / 10;
@@ -128,7 +141,6 @@ int subLists(Number **L, int L1, int L2, char sign){
   }
   L[L1] = ret;
 
-  printf("\nans: %c", L[L1]->sign);
   displayList(&L[L1]->numbers);
 
   // displayNumbers(L, 4);
@@ -136,34 +148,27 @@ int subLists(Number **L, int L1, int L2, char sign){
 
 }
 
-
-void mulscalarList(Node *L, int num, Number **N){
+void mulscalarList(Number *L, int num, Number **N){
   Node *sums = (*N)->numbers;
-  Node *temp = L;
+  Node *temp = L->numbers;
   int mul = 1;
   int carry = 0;
   (*N)->count = 0;
 
   while(temp ){
-    if(!sums->next && temp->next){
-      push(&(*N)->numbers, 0);
-    }
-    mul = ((temp->data + carry) * num)+sums->data;
-    printf("%d\t", mul%10);
-    sums->data = mul%10;
+    mul = (temp->data * num )+ carry;
+    push(&sums, mul%10);
+
     carry = mul / 10;
     temp = temp->next;
-    sums = sums->next;
     (*N)->count++;
   }
 
   while(carry){
     push(&(*N)->numbers, carry%10);
-    printf("\n%d\t", carry%10);
     carry = carry / 10;
     (*N)->count++;
   }
-
 
 }
 
@@ -171,24 +176,47 @@ void mulscalarList(Node *L, int num, Number **N){
 
 int mulLists(Number **L, int L1, int L2, char sign){
 
-  List temp1 = L[L1]->numbers;
+  Number *temp1 = L[L1];
   List temp2 = L[L2]->numbers;
 
   int inter = 0;
   int count = 0;
+
   Number *res = (Number *) malloc(sizeof(Number));
   res->numbers = NULL;
+  pushf(&res->numbers, 0);
+
   res->count = 0;
-  res->sign = sign;
+
+    pushf(&res->numbers, 0);
+  res->sign = '+';
   Node *templist = NULL;
 
-  push(&res->numbers, 0);
+  L[L1]= (Number *) malloc(sizeof(Number));
+  L[L1]->count = 0;
 
+  L[L2] = res;
+  int k, i;
+  i = 0;
   while(temp2){
-    mulscalarList(L[L1]->data, temp2->data, &res);
-    push()
-    
+    L[L1]->numbers = NULL;
+    pushf(&L[L1]->numbers, 0);
+    mulscalarList(temp1, temp2->data, &L[L1]);
+    temp2 = temp2->next;
+    k = 0;
+    while(k<i){
+      pushf(&(L[L1]->numbers), 0);
+      k++;
+    }
+    i++;
+    L[L2] = L[addLists(L, L1, L2, '+')];
+
   }
 
 
+  L[L2]->numbers = L[L2]->numbers->next;
+
+  return L2;
+
 }
+
