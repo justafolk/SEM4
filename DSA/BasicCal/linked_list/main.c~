@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "list.h"
+
+
+int main(){
+  Node *List = NULL;
+  addElement(&List, 3);
+  addElement(&List, 4);
+  addElement(&List, 4);
+  addElement(&List, 4);
+  addElement(&List, 5);
+  addElement(&List, 5);
+  addElement(&List, 5);
+  display(&List);
+  reverseLinkedList(&List);
+  display(&List)
+
+}
+

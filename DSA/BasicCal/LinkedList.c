@@ -6,18 +6,16 @@
 
 void push(List *L, int data){
 
-
-  List temp = *L;
-  if (temp->data == INT_MIN){
-    temp->data = data;
-    temp->next = NULL;
-    return;
-
-  }
-
   Node *newNode = (Node *) malloc(sizeof(Node));
   newNode->data = data;
   newNode->next = NULL;
+
+  if (*L == NULL){
+    *L = newNode;
+    return;
+  }
+
+  List temp = *L;
 
   while(temp->next != NULL){
     temp = temp->next;
@@ -27,6 +25,22 @@ void push(List *L, int data){
 
 }
 
+void pushf(List *L, int data){
+
+
+  Node *newNode = (Node *) malloc(sizeof(Node));
+  newNode->data = data;
+
+  if(!(*L)){
+    newNode->next = NULL;
+    *L = newNode;
+    return;
+  }
+  newNode->next = *L;
+  *L = newNode;
+
+
+}
 
 void displayNumbers(Number **L, int len){
   int i = 0;
@@ -116,4 +130,17 @@ void displayLists(Lists **L){
     t = t->next;
   }
 
+}
+
+Node* reverseList(Node* head) {
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* next = NULL;
+    while (curr != NULL) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
 }

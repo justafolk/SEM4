@@ -19,8 +19,7 @@ Number **L;
 
 int main(){
 
-  List operators = (List) malloc(sizeof(Node));
-  operators->data = INT_MIN;
+  List operators = NULL;
 
   char* input = NULL;
   size_t size = 0;
@@ -44,11 +43,8 @@ int main(){
   int index = 0;
 
   L[0] = (Number *) malloc(sizeof(Number ));
-  L[0]->numbers = (Node *) malloc(sizeof(Node));
-  L[0]->numbers->data = INT_MIN;
-  L[0]->numbers->next = NULL;
+  L[0]->numbers = NULL;
   L[0]->count = 0;
-  List temp = L[0]->numbers;
 
   if((input[0] == '+') || (input[0] == '-')){
     L[0]->sign = input[0];
@@ -62,7 +58,7 @@ int main(){
 
   while(input[i] != '\n'){
     if(isnumeric(input[i])){
-      push(&temp, input[i] - '0');
+      push(&L[index]->numbers, input[i] - '0');
       L[index]->count ++;
 
     } else if (input[i] == '('){
@@ -103,10 +99,7 @@ int main(){
 
       while(input[i]=='0'){i++;}
 
-      L[index]->numbers = (Node *) malloc(sizeof(Node));
-      L[index]->numbers->data = INT_MIN;
-      L[index]->numbers->next = NULL;
-      temp = L[index]->numbers;
+      L[index]->numbers = NULL;
     }
     i++;
   }
@@ -125,8 +118,11 @@ int main(){
   }
   infix[i] = operators->data;
   infix[++i] = '\n';
+  L[0] = L[subLists(L, 0, 1, '+')];
 
-  displayNumbers(L, c+1);
+  printf("FICK");
+  displayList(&L[0]->numbers);
+  printf("FICK");
 
   char postfix[50];
   infix_to_postfix(infix, postfix);

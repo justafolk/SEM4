@@ -17,7 +17,6 @@ typedef  struct Number{
 typedef Node* List;
 
 void push(List *L, int data);
-void pushf(List *L, int data);
 void displayList(List *L);
 void displayListc(List *L);
 int pop(List *L);
@@ -25,13 +24,9 @@ int pop(List *L);
 void reverse(struct Node** head_ref);
 void displayLists(Lists **L);
 
-Node* reverseList(Node* head);
 int addLists(Number **L, int L1, int L2, char sign);
 
 int subLists(Number **L, int L1, int L2, char sign);
 
-int isGreater(Number *L1, Number *L2);
-
 int mulLists(Number **L, int L1, int L2, char sign);
-void mulscalarList(Number *L, int num, Number **N);
 int divLists(Number **L, int L1, int L2, char sign);
