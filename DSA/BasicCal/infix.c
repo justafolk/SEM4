@@ -5,9 +5,8 @@
 #include "./Operations.h"
 
 char s[250];
-int top = -1; /* Global declarations */
+int top = -1; 
 
-/* Function to remove spaces from given string */
 void RemoveSpaces(char* source) {
   char* i = source;
   char* j = source;
@@ -19,17 +18,14 @@ void RemoveSpaces(char* source) {
   *i = 0;
 }
 
-/* Function for pushStack operation */
 void pushStack(char elem) { 
   s[++top] = elem;
 }
 
-/* Function for popStack operation */
 char popStack() { 
   return (s[top--]);
 }
 
-/* Function for precedence */
 int pr(char elem) { 
   switch (elem) {
     case '#':
@@ -41,13 +37,11 @@ int pr(char elem) {
       return 2;
     case '*':
     case '/':
+    case '%':
       return 3;
   }
 }
 
-/*
-* Function to convert from infix to postfix expression
-*/
 void infix_to_postfix(char *infix, char *postfix) {
   char ch, elem;
   int i = 0, k = 0;
@@ -63,19 +57,59 @@ void infix_to_postfix(char *infix, char *postfix) {
       else if (ch == ')') {
           while (s[top] != '(')
             postfix[k++] = popStack();
-          elem = popStack(); /* Remove ( */
-        } else { /* Operator */
+          elem = popStack(); 
+        } else { 
           while (pr(s[top]) >= pr(ch))
             postfix[k++] = popStack();
           pushStack(ch);
         }
   }
 
-  while (s[top] != '#') /* popStack from stack till empty */
+  while (s[top] != '#') 
     postfix[k++] = popStack();
 
-  postfix[k] = 0; /* Make postfix as valid string */
+  postfix[k] = 0; 
 }
+
+int isGreater(Number *L1s, Number *L2s){
+
+  Number *L1 = L1s;
+  Number *L2 = L2s;
+
+  reverse(&L1->numbers);
+  reverse(&L2->numbers);
+
+  Node *temp1 = L1->numbers;
+  Node *temp2 = L2->numbers;
+
+
+  while(temp1->next && temp2->next){
+    if (temp1->data > temp2->data){
+      reverse(&L1->numbers);
+      reverse(&L2->numbers);
+      return 1;
+    }
+    else if (temp1->data < temp2->data){
+      reverse(&L1->numbers);
+      reverse(&L2->numbers);
+      return 0;
+    }
+
+    temp1 = temp1->next;
+    temp2 = temp2->next;
+  }
+
+      reverse(&L1->numbers);
+      reverse(&L2->numbers);
+  if (temp1->data > temp2->data)
+    return 1;
+  else 
+    return 0;
+
+  return -1;
+}
+
+
 
 void solve(int op1, int op2, char ch, Number **L){
   switch(ch) {
@@ -86,20 +120,36 @@ void solve(int op1, int op2, char ch, Number **L){
       if (L[op1]->count > L[op2]->count ) {
         pushStack(subLists(L, op1, op2, L[op1]->sign));
 
-      } else if ( L[op1]->count == L[op2]->count && (L[op1]->numbers->data > L[op2]->numbers->data)) {
-        pushStack(subLists(L, op1, op2, L[op1]->sign));
-
-      } else if (L[op1]->count >= L[op2]->count && (L[op1]->numbers->data < L[op2]->numbers->data)) {
-        pushStack(subLists(L, op2, op1, L[op2]->sign));
+      } 
+      else if (L[op1]->count < L[op2]->count ) {
+        pushStack(subLists(L, op2, op1, '-'));
 
       } else{
-        pushStack(subLists(L, op2, op1, '-'));
+        if(isGreater(L[op1], L[op2] )){
+          pushStack(subLists(L, op1, op2, L[op1]->sign));
+        } else{
+          pushStack(subLists(L, op2, op1, '-'));
+        }
       }
 
       break;
-    case '*' : pushStack(op1*op2);
+    case '*' : 
+      if (L[op1]->sign == L[op2]->sign)
+        pushStack(mulLists(L, op1, op2,'+'));
+      else
+        pushStack(mulLists(L, op1, op2, '-'));
       break;
-    case '/' : pushStack(op1/op2);
+    case '/' : 
+      if (L[op1]->sign == L[op2]->sign)
+        pushStack(divLists(L, op1, op2,'+'));
+      else
+        pushStack(divLists(L, op1, op2, '-'));
+      break;
+    case '%':
+      if (L[op1]->sign == L[op2]->sign)
+        pushStack(modLists(L, op1, op2,'+'));
+      else
+        pushStack(modLists(L, op1, op2, '-'));
       break;
   }
 
@@ -111,15 +161,23 @@ int eval_postfix(char *postfix, Number **L) {
   int i = 0, op1, op2;
   while((ch = postfix[i++]) != 0) {
     if(isdigit(ch)) 
-      pushStack(ch-'0'); /* pushStack the operand */
-    else {        /* Operator,popStack two  operands */
+      pushStack(ch-'0'); 
+    else {        
         op2 = popStack();
         op1 = popStack();
 
         if((ch == '+') && (L[op1]->sign == L[op2]->sign )){
           solve(op1, op2, '+', L);
-        } else if((ch == '-') || (L[op1]->sign != L[op2]->sign) ){
-          solve(op1, op2, '-', L);
+        } else if((ch == '+') && (L[op1]->sign != L[op2]->sign) ){
+            if (L[op1]->sign == '-')
+              solve(op2, op1, '-', L);
+            else  
+              solve(op1, op2, '-', L);
+
+        } else if((ch == '-') && (L[op1]->sign !=  L[op2]->sign )){
+          solve(op1, op2, '+', L);
+        } else {
+          solve(op1, op2, ch, L);
         }
 
       }
@@ -129,13 +187,3 @@ int eval_postfix(char *postfix, Number **L) {
   return s[top];
 }
 
-// int main() { /* Main Program */
-//   
-//   char infx[50], pofx[50];
-//   printf("\nInput the infix expression: ");
-//   fgets(infx, 50, stdin);
-//   
-//   infix_to_postfix(infx, pofx);
-//
-//   printf("\nResult of evaluation of postfix expression : %d", eval_postfix(pofx));
-// }

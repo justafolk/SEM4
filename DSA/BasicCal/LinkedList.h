@@ -21,6 +21,7 @@ void pushf(List *L, int data);
 void displayList(List *L);
 void displayListc(List *L);
 int pop(List *L);
+void displayNumbers(Number **L, int len);
 
 void reverse(struct Node** head_ref);
 void displayLists(Lists **L);
