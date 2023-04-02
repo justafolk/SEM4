@@ -89,6 +89,9 @@ int main(){
             L[index]->sign = '-';
           i++;
         }
+
+        while(input[i+1]=='0'){i++;}
+
       } else if (input[i] == ')'){
         push(&operators, '0'+c++);
         while(input[i] == ')'){

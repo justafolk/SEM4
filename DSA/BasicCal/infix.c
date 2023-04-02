@@ -115,12 +115,18 @@ void solve(int op1, int op2, char ch, Number **L){
       else
         pushStack(divLists(L, op1, op2, '-'));
       break;
-  //case '%':
-  //  if (L[op1]->sign == L[op2]->sign)
-  //    pushStack(modLists(L, op1, op2,'+'));
-  //  else
-  //    pushStack(modLists(L, op1, op2, '-'));
-  //  break;
+    case '%':
+      if (L[op1]->sign == L[op2]->sign)
+        pushStack(modLists(L, op1, op2,'+'));
+      else
+        pushStack(modLists(L, op1, op2, '-'));
+      break;
+    case '^':
+      if (L[op1]->sign == L[op2]->sign)
+        pushStack(expoLists(L, op1, op2,'+'));
+      else
+        pushStack(expoLists(L, op1, op2, '-'));
+      break;
   }
 
 

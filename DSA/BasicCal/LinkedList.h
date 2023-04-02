@@ -35,5 +35,7 @@ int subLists(Number **L, int L1, int L2, char sign);
 int isGreater(Number *L1, Number *L2);
 
 int mulLists(Number **L, int L1, int L2, char sign);
+int expoLists(Number **L, int L1, int L2, char sign);
 void mulscalarList(Number *L, int num, Number **N);
 int divLists(Number **L, int L1, int L2, char sign);
+int modLists(Number **L, int L1, int L2, char sign);
