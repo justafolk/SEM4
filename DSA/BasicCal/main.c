@@ -43,7 +43,7 @@ int main(){
     len = strlen(input);
     i = 0;
     c = 1;
-
+    RemoveSpaces(input);
     while(input[i] != '\0'){
       if (!isnumeric(input[i])){
         c++;
