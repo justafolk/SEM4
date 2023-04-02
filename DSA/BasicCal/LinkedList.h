@@ -15,6 +15,7 @@ typedef  struct Number{
 } Number;
 
 typedef Node* List;
+void initNumber(Number **N);
 
 void push(List *L, int data);
 void pushf(List *L, int data);

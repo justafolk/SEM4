@@ -26,6 +26,14 @@ void push(List *L, int data){
 
 }
 
+void initNumber(Number **N){
+  *N = (Number *) malloc(sizeof(Number ));
+  (*N)->numbers = (Node *) malloc(sizeof(Node));
+  (*N)->numbers = NULL;
+  (*N)->count = 0;
+  (*N)->sign = '+';
+
+}
 void pushf(List *L, int data){
 
 
@@ -96,11 +104,11 @@ int pop(List *L){
   return det;
 }
 
-void reverse(struct Node** head_ref)
+void reverse(List* head_ref)
 {
-  struct Node* prev = NULL;
-  struct Node* current = *head_ref;
-  struct Node* next = NULL;
+  List prev = NULL;
+  List current = *head_ref;
+  List next = NULL;
   while (current != NULL) {
     next = current->next;
     current->next = prev;
@@ -133,15 +141,41 @@ void displayLists(Lists **L){
 
 }
 
-Node* reverseList(Node* head) {
-    Node* prev = NULL;
-    Node* curr = head;
-    Node* next = NULL;
-    while (curr != NULL) {
-        next = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = next;
+int isGreater(Number *L1s, Number *L2s){
+
+  Number *L1 = L1s;
+  Number *L2 = L2s;
+
+  reverse(&L1->numbers);
+  reverse(&L2->numbers);
+
+  Node *temp1 = L1->numbers;
+  Node *temp2 = L2->numbers;
+
+
+  while(temp1->next && temp2->next){
+    if (temp1->data > temp2->data){
+      reverse(&L1->numbers);
+      reverse(&L2->numbers);
+      return 1;
     }
-    return prev;
+    else if (temp1->data < temp2->data){
+      reverse(&L1->numbers);
+      reverse(&L2->numbers);
+      return 0;
+    }
+
+    temp1 = temp1->next;
+    temp2 = temp2->next;
+  }
+
+      reverse(&L1->numbers);
+      reverse(&L2->numbers);
+  if (temp1->data > temp2->data)
+    return 1;
+  else 
+    return 0;
+
+  return -1;
 }
+

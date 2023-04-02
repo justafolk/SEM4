@@ -58,9 +58,6 @@ int addLists(Number **L, int L1, int L2, char sign){
 }
 
 int subLists(Number **L, int L1, int L2, char sign){
-
-
-
   List temp1 = L[L1]->numbers;
   List temp2 = L[L2]->numbers;
 
@@ -134,8 +131,8 @@ int subLists(Number **L, int L1, int L2, char sign){
     borrow = 1;
   }
   if( carry > 0){
-
     ret->count++;
+
   push(&ret->numbers, carry);
   }
 
@@ -165,7 +162,7 @@ void mulscalarList(Number *L, int num, Number **N){
   int carry = 0;
   (*N)->count = 0;
 
-  while(temp ){
+  while(temp){
     mul = (temp->data * num )+ carry;
     push(&sums, mul%10);
 
@@ -230,7 +227,6 @@ int mulLists(Number **L, int L1, int L2, char sign){
 }
 
 
-
 int divLists(Number **L, int L1, int L2, char sign){
   Number *temp1 = L[L1];
   Number *temp2 = L[L2];
@@ -239,9 +235,10 @@ int divLists(Number **L, int L1, int L2, char sign){
   Node *temp2L = L[L2]->numbers;
 
   if (L[L2]->count == 1 && L[L2]->numbers->data == 0){
-    return 0/0;
+    int a = 0;
+    printf("Zero Divide?");
+    exit(1);
   }
-
 
   int topflag = -1;
 
@@ -253,6 +250,7 @@ int divLists(Number **L, int L1, int L2, char sign){
 
   reverse(&temp1L);
   reverse(&temp2L);
+
   L[L2]->numbers = temp2L;
   while(temp2L){
     pushf(&divider, temp2L->data);
@@ -262,18 +260,15 @@ int divLists(Number **L, int L1, int L2, char sign){
   Node *revtemp2L = L[L2]->numbers;
   temp2L = L[L2]->numbers; 
   int count = 0;
-  int fcount = 0;
-  int freepass = L[L2]->count;
+  int freepass = L[L2]->count+1;
 
   L[L2]->numbers = divider;
 
   Number *res = (Number *) malloc(sizeof(Number));
   res->numbers = NULL;
-  pushf(&res->numbers, INT_MIN);
   res->sign = sign;
   res->count = 0;
 
-  Node *ftemp = res->numbers;
 
   while (!(temp1->count == 1 && temp1L->data == 0) ){
     dividend->numbers = NULL;
@@ -281,7 +276,6 @@ int divLists(Number **L, int L1, int L2, char sign){
 
     if(!(temp2L && temp1L))
       break;
-
     while(temp2L && temp1L){
       if((temp1L->data < temp2L->data) && topflag == -1)
         topflag = 0;
@@ -297,12 +291,18 @@ int divLists(Number **L, int L1, int L2, char sign){
 
     if (topflag == 0){
       dividend->count++;
+      if (!temp1L){
+        pushf(&res->numbers, 0);
+        break;
+      }
+      freepass--;
       pushf(&dividend->numbers, temp1L->data);
       temp1L = temp1L->next; 
     }
 
     while (freepass < 0){
-      push(&res->numbers, 0);
+      pushf(&res->numbers, 0);
+      res->count++;
       freepass++;
     }
 
@@ -313,6 +313,7 @@ int divLists(Number **L, int L1, int L2, char sign){
     while( L[subLists(L, L1, L2, '+')]->sign != '-' ){
 
       divider = L[L1]->numbers;
+
       freepass = L[L1]->count+1;
 
       if (divider->data == 0 && !divider->next){
@@ -323,11 +324,9 @@ int divLists(Number **L, int L1, int L2, char sign){
     }
 
 
-    if (!count)
-      push(&res->numbers, 0);
-
     while(count ){
-      push(&res->numbers, count%10);
+      pushf(&res->numbers, count%10);
+      res->count++;
       count = count / 10;
     }
 
@@ -339,7 +338,7 @@ int divLists(Number **L, int L1, int L2, char sign){
 
     if (topflag){
       L[L1]->numbers = temp1L;
-      freepass = 0;
+      freepass = 1;
 
     }else{
 
@@ -356,138 +355,8 @@ int divLists(Number **L, int L1, int L2, char sign){
     temp2L = revtemp2L;
   }
 
-  reverse(&res->numbers);
   L[L1] = res;
   return L1;
 }
 
 
-
-int modLists(Number **L, int L1, int L2, char sign){
-  Number *temp1 = L[L1];
-  Number *temp2 = L[L2];
-
-  Node *temp1L = L[L1]->numbers;
-  Node *temp2L = L[L2]->numbers;
-
-  if (L[L2]->count == 1 && L[L2]->numbers->data == 0){
-    return 0/0;
-  }
-
-
-  int topflag = -1;
-
-  Number *dividend = (Number *) malloc(sizeof(Number));
-  dividend->count = 0;
-  dividend->numbers = NULL;
-
-  Node *divider = NULL;
-
-  reverse(&temp1L);
-  reverse(&temp2L);
-  L[L2]->numbers = temp2L;
-  while(temp2L){
-    pushf(&divider, temp2L->data);
-    temp2L = temp2L->next;
-  }
-
-  Node *revtemp2L = L[L2]->numbers;
-  temp2L = L[L2]->numbers; 
-  int count = 0;
-  int fcount = 0;
-  int freepass = L[L2]->count;
-
-  L[L2]->numbers = divider;
-
-  Number *res = (Number *) malloc(sizeof(Number));
-  res->numbers = NULL;
-  pushf(&res->numbers, INT_MIN);
-  res->sign = sign;
-  res->count = 0;
-
-  Node *ftemp = res->numbers;
-
-  while (!(temp1->count == 1 && temp1L->data == 0) ){
-    dividend->numbers = NULL;
-    topflag = -1;
-
-    if(!(temp2L && temp1L))
-      break;
-
-    while(temp2L && temp1L){
-      if((temp1L->data < temp2L->data) && topflag == -1)
-        topflag = 0;
-      if((temp1L->data > temp2L->data) && topflag == -1)
-        topflag = 1;
-
-      pushf(&dividend->numbers, temp1L->data);
-      dividend->count++;
-      temp1L = temp1L->next;
-      temp2L = temp2L->next;
-      freepass--;
-    }
-
-    if (topflag == 0){
-      dividend->count++;
-      pushf(&dividend->numbers, temp1L->data);
-      temp1L = temp1L->next; 
-    }
-
-    while (freepass < 0){
-      push(&res->numbers, 0);
-      freepass++;
-    }
-
-    count = 0;
-
-    L[L1]= dividend;
-    topflag = 0;
-    while( L[subLists(L, L1, L2, '+')]->sign != '-' ){
-
-      divider = L[L1]->numbers;
-      freepass = L[L1]->count+1;
-
-      if (divider->data == 0 && !divider->next){
-        topflag = 1;
-      }
-
-      count++;
-    }
-
-
-    if (!count)
-      push(&res->numbers, 0);
-
-    while(count ){
-      push(&res->numbers, count%10);
-      count = count / 10;
-    }
-
-    if((topflag == 1 && !temp1L) || !temp1L){
-      break;
-    }
-
-    L[L1]->numbers = divider;
-
-    if (topflag){
-      L[L1]->numbers = temp1L;
-      freepass = 0;
-
-    }else{
-
-      reverse(&L[L1]->numbers);
-      divider = L[L1]->numbers;
-
-      while(divider->next != NULL){
-        divider = divider->next;
-      }
-      divider->next = temp1L;
-    }
-    temp1L = L[L1]->numbers;
-
-    temp2L = revtemp2L;
-  }
-
-  L[L1] = divider;
-  return L1;
-}

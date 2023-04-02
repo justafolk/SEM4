@@ -15,10 +15,12 @@ int isnumeric(char s){
   return 0;
 }
 
+
 Number **L;
 
 int main(){
 
+  system("clear");
   printf("bc 1.0\n");
   printf("Copyright 2023 COEP's Free Software Foundation ");
   printf("\nThis is free software with ABSOLUTELY NO WARRANTY.\n");
@@ -54,11 +56,7 @@ int main(){
     L = (Number **) malloc(sizeof(Number *)*(c*4));
     index = 0;
 
-    L[0] = (Number *) malloc(sizeof(Number ));
-    L[0]->numbers = (Node *) malloc(sizeof(Node));
-    L[0]->numbers->data = INT_MIN;
-    L[0]->numbers->next = NULL;
-    L[0]->count = 0;
+    initNumber(&L[0]);
     temp = L[0]->numbers;
 
     if((input[0] == '+') || (input[0] == '-')){
@@ -79,7 +77,7 @@ int main(){
 
     while(input[i] != '\n'){
       if(isnumeric(input[i])){
-        push(&temp, input[i] - '0');
+        pushf(&L[index]->numbers, input[i] - '0');
         L[index]->count ++;
 
       } else if (input[i] == '('){
@@ -92,30 +90,22 @@ int main(){
           i++;
         }
       } else if (input[i] == ')'){
-
-        push(&operators, '0'+c);
+        push(&operators, '0'+c++);
         while(input[i] == ')'){
           push(&operators, input[i]);
           i++;
         }
-        c++;
         i--;
       } else{
         if (input[i-1] != ')'){
-
           push(&operators, '0'+c);
           c++;
         }
-         push(&operators, input[i]);
+        push(&operators, input[i]);
 
-        reverse(&L[index]->numbers);
         index++;
-        L[index] = (Number *) malloc(sizeof(Number ));
 
-        L[index]->numbers = (Node *) malloc(sizeof(Node));
-        L[index]->numbers->data = INT_MIN;
-        L[index]->numbers->next = NULL;
-        L[index]->sign = '+';
+        initNumber(&L[index]);
         temp = L[index]->numbers;
 
         if((input[i+1] == '+') || (input[i+1] == '-') ){
@@ -123,7 +113,7 @@ int main(){
           i++;
         } 
 
-        while(input[i]=='0'){i++;}
+        while(input[i+1]=='0'){i++;}
         if(!isnumeric(input[i+1]) && input[i+1] != '(')
           i--;
 
@@ -131,7 +121,6 @@ int main(){
       i++;
     }
 
-    reverse(&L[index]->numbers);
     if(input[i-1] != ')'){
       push(&operators, '0'+c);
     }
@@ -151,8 +140,9 @@ int main(){
 
     infix_to_postfix(infix, postfix);
 
+
     int rest = eval_postfix(postfix, L);
-    if(L[rest]->sign != '+'){
+    if( (L[rest]->sign != '+' ) && !(L[rest]->numbers->data == 0 && L[rest]->count == 1)){
       printf("%c", L[rest]->sign);
     }
     displayList(&L[rest]->numbers);

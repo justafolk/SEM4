@@ -71,44 +71,6 @@ void infix_to_postfix(char *infix, char *postfix) {
   postfix[k] = 0; 
 }
 
-int isGreater(Number *L1s, Number *L2s){
-
-  Number *L1 = L1s;
-  Number *L2 = L2s;
-
-  reverse(&L1->numbers);
-  reverse(&L2->numbers);
-
-  Node *temp1 = L1->numbers;
-  Node *temp2 = L2->numbers;
-
-
-  while(temp1->next && temp2->next){
-    if (temp1->data > temp2->data){
-      reverse(&L1->numbers);
-      reverse(&L2->numbers);
-      return 1;
-    }
-    else if (temp1->data < temp2->data){
-      reverse(&L1->numbers);
-      reverse(&L2->numbers);
-      return 0;
-    }
-
-    temp1 = temp1->next;
-    temp2 = temp2->next;
-  }
-
-      reverse(&L1->numbers);
-      reverse(&L2->numbers);
-  if (temp1->data > temp2->data)
-    return 1;
-  else 
-    return 0;
-
-  return -1;
-}
-
 
 
 void solve(int op1, int op2, char ch, Number **L){
@@ -140,17 +102,25 @@ void solve(int op1, int op2, char ch, Number **L){
         pushStack(mulLists(L, op1, op2, '-'));
       break;
     case '/' : 
+      if ( ( (L[op1]->count == L[op2]->count) && isGreater(L[op2], L[op1])) || L[op1]->count < L[op2]->count){
+
+        L[op1]->count = 1;
+        L[op1]->numbers->data = 0;
+        L[op1]->numbers->next = NULL;
+        pushStack(op1);
+        break;
+      }
       if (L[op1]->sign == L[op2]->sign)
         pushStack(divLists(L, op1, op2,'+'));
       else
         pushStack(divLists(L, op1, op2, '-'));
       break;
-    case '%':
-      if (L[op1]->sign == L[op2]->sign)
-        pushStack(modLists(L, op1, op2,'+'));
-      else
-        pushStack(modLists(L, op1, op2, '-'));
-      break;
+  //case '%':
+  //  if (L[op1]->sign == L[op2]->sign)
+  //    pushStack(modLists(L, op1, op2,'+'));
+  //  else
+  //    pushStack(modLists(L, op1, op2, '-'));
+  //  break;
   }
 
 
