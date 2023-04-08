@@ -20,7 +20,6 @@ Number **L;
 
 int main(){
 
-  system("clear");
   printf("bc 1.0\n");
   printf("Copyright 2023 COEP's Free Software Foundation ");
   printf("\nThis is free software with ABSOLUTELY NO WARRANTY.\n");
@@ -40,6 +39,8 @@ int main(){
     size = 0;
 
     getline(&input, &size, stdin);
+    if (!strcmp(input, "quit\n") )
+      exit(0);
     len = strlen(input);
     i = 0;
     c = 1;

@@ -65,7 +65,7 @@ int subLists(Number **L, int L1, int L2, char sign){
   ret->numbers = (Node *) malloc(sizeof(Node));
 
   ret->numbers->data = INT_MIN;
-  ret->numbers->next = 0;
+  ret->numbers->next = NULL;
   ret->sign = sign;
   ret->count = 0;
 
@@ -98,13 +98,11 @@ int subLists(Number **L, int L1, int L2, char sign){
 
   }
 
-
   while(temp1 != NULL ){
     if(temp1->data < borrow){
       sum =((temp1->data+10)-borrow)+carry;
       borrow = 1;
-    }
-  else{
+    } else{
       sum =((temp1->data)-borrow)+carry;
       borrow = 0;
     }
@@ -114,12 +112,13 @@ int subLists(Number **L, int L1, int L2, char sign){
     ret->count++;
     temp1 = temp1->next;
   }
+
   while(temp2 != NULL ){
+
     if(temp2->data < borrow){
       sum = ((temp2->data+10)-borrow) + carry;
       borrow = 1;
-    }
-  else{
+    } else{
       sum = ((temp2->data)-borrow) + carry;
       borrow = 0;
     }
@@ -133,7 +132,7 @@ int subLists(Number **L, int L1, int L2, char sign){
   if( carry > 0){
     ret->count++;
 
-  push(&ret->numbers, carry);
+    push(&ret->numbers, carry);
   }
 
   reverse(&ret->numbers);
@@ -277,10 +276,11 @@ int divLists(Number **L, int L1, int L2, char sign){
 
     if(!(temp2L && temp1L))
       break;
+
     while(temp2L && temp1L){
-      if((temp1L->data < temp2L->data) && topflag == -1)
-        topflag = 0;
-      if((temp1L->data > temp2L->data) && topflag == -1)
+      if((topflag == -1 && temp1L->data < temp2L->data) )
+         topflag = 0;
+      if((topflag == -1 && temp1L->data > temp2L->data) )
         topflag = 1;
 
       pushf(&dividend->numbers, temp1L->data);
@@ -311,19 +311,15 @@ int divLists(Number **L, int L1, int L2, char sign){
 
     L[L1]= dividend;
     topflag = 0;
+
     while( L[subLists(L, L1, L2, '+')]->sign != '-' ){
-
       divider = L[L1]->numbers;
-
       freepass = L[L1]->count+1;
-
       if (divider->data == 0 && !divider->next){
         topflag = 1;
       }
-
       count++;
     }
-
 
     while(count ){
       pushf(&res->numbers, count%10);
@@ -341,8 +337,7 @@ int divLists(Number **L, int L1, int L2, char sign){
       L[L1]->numbers = temp1L;
       freepass = 1;
 
-    }else{
-
+    } else{
       reverse(&L[L1]->numbers);
       divider = L[L1]->numbers;
 
