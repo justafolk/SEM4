@@ -6,12 +6,11 @@ int main(){
 
   aBST t;
   initaBST(&t);
-  insertaBST(&t, 5);
+  insertaBST(&t, 1);
   insertaBST(&t, 2);
   insertaBST(&t, 3);
-  insertaBST(&t, 7);
   insertaBST(&t, 4);
-  insertaBST(&t, 6);
+  insertaBST(&t, 5);
   inOrderaBST(t);
 
   printf("\nSizeof the array %d\n", t.size);
