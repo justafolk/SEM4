@@ -133,3 +133,8 @@ void levelOrderaBST(aBST t){
 
   }
 }
+
+void farthestLeafNode(aBST t){
+  int n = t.arr[t.size-1];
+
+}
