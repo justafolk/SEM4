@@ -4,3 +4,5 @@ void initAVL(AVLtree *t){
   *t = NULL;
   return;
 }
+
+
