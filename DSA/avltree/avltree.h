@@ -12,11 +12,15 @@ typedef struct Node{
 typedef Node* AVLtree;
 
 void initAVL(AVLtree *t);
-void insertAVL(AVLtree *t, int d);
+void insertAVL(AVLtree *t, int key);
 void adjustBF(AVLtree *t);
 
-Node* adjustImbalance(AVLtree *t);
+int height(AVLtree t);
+Node *imbalNode(AVLtree t);
+
+void adjustImbalance(AVLtree *t);
+void rrAVL(AVLtree *t);
+void llAVL(AVLtree *t);
 
 void inorderAVL(AVLtree t);
-
 
