@@ -11,11 +11,30 @@ void inorderAVL(AVLtree t){
     return;
 
   inorderAVL(t->left);
-  printf("%d - %d\n", t->key, t->bf);
+  printf("%s ~ %d", t->key, t->bf);
+  if(t->parent)
+    printf("  ~ %s\n", t->parent->key);
+  else 
+    printf("  ~  NULL\n");
   inorderAVL(t->right);
 }
 
-void insertAVL(AVLtree *t, int key){
+
+void preorderAVL(AVLtree t){
+  if (!t)
+    return;
+
+  printf("%3s ~ %3d", t->key, t->bf);
+  if(t->parent)
+    printf("  ~ %3s\n", t->parent->key);
+  else 
+    printf("  ~  NULL\n");
+
+  preorderAVL(t->left);
+  preorderAVL(t->right);
+}
+
+void insertAVL(AVLtree *t, char *key){
 
   AVLtree nh = (AVLtree) malloc(sizeof(Node));
   nh->left = nh->right =  NULL;
@@ -34,10 +53,10 @@ void insertAVL(AVLtree *t, int key){
   while(h){
     p = h;
 
-    if (h->key < key){
+    if (strcmp(h->key , key) < 0){
       h = h->right;
 
-    } else if (h->key > key){
+    } else if (strcmp(h->key , key) > 0){
       h = h->left;
 
     } else{
@@ -46,7 +65,7 @@ void insertAVL(AVLtree *t, int key){
   }
 
   nh->parent = p;
-  if (p->key < key){
+  if (strcmp(p->key , key) < 0){
     p->right = nh;
   } else{
     p->left = nh;
@@ -55,9 +74,9 @@ void insertAVL(AVLtree *t, int key){
   adjustBF(&nh);
 
   AVLtree imbalnode = imbalNode(nh);
-  if (imbalnode)
-    printf("imbal node:%d\n", imbalnode->key);
-
+  if (imbalnode){
+    adjustImbalance(t, imbalnode);
+  }
 
 }
 
@@ -65,7 +84,7 @@ Node *imbalNode(AVLtree t){
   if(!t)
     return NULL;
 
-  while(t->parent){
+  while(t){
     if (t->bf > 1 || t->bf < -1){
       return t;
     }
@@ -89,7 +108,7 @@ int height(AVLtree t){
 
 
 void adjustBF(AVLtree *t){
-  if (!t)
+  if (!*t)
     return;
 
   if((*t)->parent)
@@ -100,77 +119,166 @@ void adjustBF(AVLtree *t){
 }
 
 
-void adjustImbalance(AVLtree *t){
-  if (!(*t))
+void adjustImbalance(AVLtree *t, AVLtree imbal){
+  if (!(t))
     return;
 
-  if ((*t)->bf > 1){
-    if ((*t)->bf > 1){
-      rrAVL(t);
+  if ((imbal)->bf < -1){
+    if (imbal->right && imbal->right->bf <= -1){
+      rrAVL(t, imbal);
     } else {
-      // rrAVL(t);
-      // llAVL(t);
+      llAVL(t, imbal->right);
+  //    adjustBF(&imbal->right->right);
+
+      rrAVL(t, imbal);
     }
   } else {
-    if ((*t)->bf < -1){
-      // llAVL(t);
+    if ( imbal->left && (imbal->left)->bf >= 1){
+      llAVL(t, imbal);
     } else {
-      // llAVL(t);
-      // rrAVL(t);
+      rrAVL(t, imbal->left);
+   //   adjustBF(&imbal->left->left);
+      llAVL(t, imbal);
     }
   }
+  //adjustBF(&imbal);
 
 }
 
-void rrAVL(AVLtree *t){
+void rrAVL(AVLtree *t, AVLtree p){
 
-  if ((*t)->parent){
-    AVLtree aParent = (*t)->parent;
-    if (aParent->right == *t){
-      aParent->right = (*t)->right;
-    } else {
-      aParent->left = (*t)->right;
-    }
-    (*t)->right->parent = aParent;
-  } else {
-    (*t)->right->parent = NULL;
+  AVLtree aParent = p->parent;
+
+  AVLtree b = p->right;
+
+  p->right = b->left;
+
+  b->left = p;
+  b->parent = p->parent;
+  p->parent = b;
+
+  if (p->right){
+    p->right->parent = p;
   }
 
-  AVLtree h = *t;
-  AVLtree b = h->right;
+  adjustBF(&p);
 
-  h->right = b->left;
+  if (*t == p){
+    *t = b;
+    return;
+  }
 
-  b->left = h;
-  h->parent = b;
-  b->parent = h->parent;
-  *t = b;
+
+  if (aParent->right == p){
+    aParent->right = b;
+  } else {
+    aParent->left = b;
+  }
+  b->parent = aParent;
 
 
 }
 
-void llAVL(AVLtree *t){
+void llAVL(AVLtree *t, AVLtree p){
 
-  if ((*t)->parent){
-    AVLtree aParent = (*t)->parent;
-    if (aParent->right == *t){
-      aParent->right = (*t)->left;
-    } else {
-      aParent->left = (*t)->left;
-    }
-    (*t)->left->parent = aParent;
-  } else {
-    (*t)->left->parent = NULL;
+
+
+  AVLtree aParent = p->parent;
+  AVLtree b = p->left;
+  p->left = b->right;
+
+
+  b->right = p;
+  b->parent = p->parent;
+  p->parent = b;
+
+  if (p->left){
+    p->left->parent = p;
   }
 
-  AVLtree h = *t;
-  AVLtree b = h->left;
+  adjustBF(&p);
+  
+  if (*t == p){
+    *t = b;
+    return;
+  }
 
-  h->left = b->right;
 
-  b->right = h;
-  h->parent = b;
-  b->parent = h->parent;
-  *t = b;
+  if (aParent->right == p){
+    aParent->right = b;
+  } else {
+    aParent->left = b;
+  }
+  b->parent = aParent;
 
+}
+
+AVLtree minValueNode(AVLtree t){
+    while (t && t->left != NULL)
+        t = t->left;
+ 
+    return t;
+}
+
+AVLtree rmNodeBST(AVLtree t, char* key){
+    if (t == NULL)
+        return t;
+
+    if (strcmp(key , t->key) < 0){
+        t->left = rmNodeBST(t->left, key);
+        if (t->left)
+          t->left->parent = t;
+    } else if (strcmp(key , t->key) > 0){
+
+        t->right = rmNodeBST(t->right, key);
+        if (t->right)
+          t->right->parent = t;
+    } else {
+        if (t->left == NULL) {
+            AVLtree temp = t->right;
+            free(t);
+            return temp;
+
+        } else if (t->right == NULL) {
+            AVLtree temp = t->left;
+            free(t);
+            return temp;
+        }
+        AVLtree temp = minValueNode(t->right);
+        t->key = temp->key;
+        t->right = rmNodeBST(t->right, temp->key);
+        if (t->right)
+          t->right->parent = t;
+    }
+    return t;
+}
+
+AVLtree rmNodeAVL(AVLtree *t, char* key){
+
+  if (*t == NULL)
+      return *t;
+
+  AVLtree delnode = rmNodeBST(*t, key);
+
+  adjustBF(&delnode->right);
+  adjustBF(&delnode->left);
+  
+  AVLtree imbal = imbalNode(*t);
+
+  while(imbal){
+    adjustImbalance(t, imbal);
+    imbal = imbalNode(*t);
+  }
+
+  return delnode;
+}
+
+void destroyTree(AVLtree *t){
+  if (!*t)
+    return;
+
+  destroyTree(&(*t)->left);
+  destroyTree(&(*t)->right);
+  free(*t);
+  return;
 }
