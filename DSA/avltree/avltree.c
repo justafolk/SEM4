@@ -11,9 +11,9 @@ void inorderAVL(AVLtree t){
     return;
 
   inorderAVL(t->left);
-  printf("%s ~ %d", t->key, t->bf);
+  printf("%15s ~ %3d", t->key, t->bf);
   if(t->parent)
-    printf("  ~ %s\n", t->parent->key);
+    printf("  ~ %15s\n", t->parent->key);
   else 
     printf("  ~  NULL\n");
   inorderAVL(t->right);
@@ -24,9 +24,9 @@ void preorderAVL(AVLtree t){
   if (!t)
     return;
 
-  printf("%3s ~ %3d", t->key, t->bf);
+  printf("%15s ~ %3d", t->key, t->bf);
   if(t->parent)
-    printf("  ~ %3s\n", t->parent->key);
+    printf("  ~ %15s\n", t->parent->key);
   else 
     printf("  ~  NULL\n");
 
