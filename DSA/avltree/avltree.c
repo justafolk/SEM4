@@ -74,8 +74,9 @@ void insertAVL(AVLtree *t, char *key){
   adjustBF(&nh);
 
   AVLtree imbalnode = imbalNode(nh);
-  if (imbalnode){
+  while (imbalnode){
     adjustImbalance(t, imbalnode);
+    imbalnode = imbalNode(nh);
   }
 
 }
@@ -280,5 +281,18 @@ void destroyTree(AVLtree *t){
   destroyTree(&(*t)->left);
   destroyTree(&(*t)->right);
   free(*t);
+  return;
+}
+
+void generateLatex(AVLtree t){
+  if (!t)
+    return;
+
+  printf("[");
+  printf("%s", t->key);
+  generateLatex(t->left);
+  generateLatex(t->right);
+
+  printf("]");
   return;
 }

@@ -20,6 +20,7 @@ void adjustBF(AVLtree *t);
 int height(AVLtree t);
 Node *imbalNode(AVLtree t);
 
+void generateLatex(AVLtree t);
 
 AVLtree rmNodeAVL(AVLtree *t, char *key);
 
