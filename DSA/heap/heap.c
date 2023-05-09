@@ -64,15 +64,15 @@ int rmheap(Heap *h){
 
     if (t->arr[i] < t->arr[(2*i+1)] || t->arr[i] < t->arr[(2*i+2)] ){
 
-    if (t->arr[(2*i)+1] < t->arr[(2*i)+2]){
-      swap(h, i, (2*i)+2);
-      i = 2*i+2;
+      if (t->arr[(2*i)+1] < t->arr[(2*i)+2]){
+        swap(h, i, (2*i)+2);
+        i = 2*i+2;
 
-    } else if (t->arr[(2*i)+1] > t->arr[2*i+2]){
-      swap(h, i, (2*i)+1);
-      i = 2*i +1;
+      } else if (t->arr[(2*i)+1] > t->arr[2*i+2]){
+        swap(h, i, (2*i)+1);
+        i = 2*i +1;
 
-    }
+      }
     }
     else{ break; }
 
