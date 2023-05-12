@@ -19,6 +19,15 @@ int main(){
     fscanf(fptr, "%s",s);
   }
 
+   s = (char *) malloc(sizeof(char)*25);
+  fscanf(fptr, "%s",s);
+
+  while(*s != '\0'){
+    rmNodeAVL(&t, s);
+    s = (char *) malloc(sizeof(char)*25);
+    fscanf(fptr, "%s",s);
+  }
+
   generateLatex(t);
   inorderAVL(t);
 
@@ -43,7 +52,9 @@ int main(){
         rmNodeAVL(&t, ele);
         break;
       case 3:
+        generateLatex(t);
         printf("\n====================\n");
+
         inorderAVL(t);
         printf("\n====================\n");
         break;

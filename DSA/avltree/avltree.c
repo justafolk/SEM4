@@ -74,9 +74,8 @@ void insertAVL(AVLtree *t, char *key){
   adjustBF(&nh);
 
   AVLtree imbalnode = imbalNode(nh);
-  while (imbalnode){
+  if (imbalnode){
     adjustImbalance(t, imbalnode);
-    imbalnode = imbalNode(nh);
   }
 
 }
@@ -215,8 +214,8 @@ void llAVL(AVLtree *t, AVLtree p){
 }
 
 AVLtree minValueNode(AVLtree t){
-    while (t && t->left != NULL)
-        t = t->left;
+    while (t && t->right != NULL)
+        t = t->right;
  
     return t;
 }
@@ -245,11 +244,11 @@ AVLtree rmNodeBST(AVLtree t, char* key){
             free(t);
             return temp;
         }
-        AVLtree temp = minValueNode(t->right);
+        AVLtree temp = minValueNode(t->left);
         t->key = temp->key;
-        t->right = rmNodeBST(t->right, temp->key);
-        if (t->right)
-          t->right->parent = t;
+        t->left = rmNodeBST(t->left, temp->key);
+        if (t->left)
+          t->left->parent = t;
     }
     return t;
 }
@@ -266,7 +265,7 @@ AVLtree rmNodeAVL(AVLtree *t, char* key){
   
   AVLtree imbal = imbalNode(*t);
 
-  while(imbal){
+  if (imbal){
     adjustImbalance(t, imbal);
     imbal = imbalNode(*t);
   }
