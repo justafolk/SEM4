@@ -4,35 +4,22 @@ int main(){
   Heap h;
   init(&h);
 
-  insertheap(&h, 2);
-  insertheap(&h, 1);
-  insertheap(&h, 1);
-  rmheap(&h);
-  insertheap(&h, 2);
-  insertheap(&h, 3);
-  insertheap(&h, 4);
   insertheap(&h, 5);
+  insertheap(&h, 6);
+  insertheap(&h, 7);
+  insertheap(&h, 8);
+  insertheap(&h, 9);
+  insertheap(&h, 10);
+  insertheap(&h, 11);
+  insertheap(&h, 12);
+  insertheap(&h, 13);
+  insertheap(&h, 14);
+  insertheap(&h, 15);
+  insertheap(&h, 16);
 
-  rmheap(&h);
-  rmheap(&h);
-  rmheap(&h);
-  rmheap(&h);
-  rmheap(&h);
+
+  heapSortDsc(&h);
 
 
-  insertheap(&h, 2);
-  insertheap(&h, 1);
-  insertheap(&h, 1);
-  rmheap(&h);
-  insertheap(&h, 2);
-  insertheap(&h, 3);
-  insertheap(&h, 4);
-  insertheap(&h, 5);
-
-  rmheap(&h);
-  rmheap(&h);
-  rmheap(&h);
-  rmheap(&h);
-  rmheap(&h);
-
+  printArray(h);
 }

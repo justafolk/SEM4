@@ -12,7 +12,6 @@ void init(Heap *h){
 
 void printArray(Heap h){
   int i = 0;
-
   while(i < h->rear){
     printf("%d\t", h->arr[i++]);
   }
@@ -57,10 +56,10 @@ int rmheap(Heap *h){
   int res = t->arr[0];
 
   t->arr[0] = t->arr[--t->rear];
-  t->arr[t->rear] = 0;
+  t->arr[t->rear] = INT_MIN;
   int i = 0;
 
-  while(i < t->rear){
+  while((2*i + 1) < t->rear){
 
     if (t->arr[i] < t->arr[(2*i+1)] || t->arr[i] < t->arr[(2*i+2)] ){
 
@@ -77,10 +76,36 @@ int rmheap(Heap *h){
     else{ break; }
 
   }
-
-  printf("Rm'd element: %d now the top element is %d\n", res, (*h)->arr[0]);
-
-
   return res;
 
 }
+
+void heapSortAsc(Heap *h){
+
+  // Delete top element 
+  // Save it on s+1 loc
+  // keep deleting till NULL
+
+  Heap temp = *h;
+  int sdtep;
+  int size = temp->rear;
+  while(temp->rear){
+    sdtep = rmheap(h);
+    printArray(temp);
+    temp->arr[temp->rear] = sdtep;
+  }
+  temp->rear = size;
+}
+
+void heapSortDsc(Heap *h){
+
+  int *s = (int *) malloc(sizeof(int)*(*h)->rear);
+
+  int i = 0;
+  while((*h)->rear){
+    s[i++] = rmheap(h);
+  }
+  (*h)->arr = s;
+  (*h)->rear = i;
+}
+

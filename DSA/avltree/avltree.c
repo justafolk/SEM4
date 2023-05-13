@@ -71,11 +71,14 @@ void insertAVL(AVLtree *t, char *key){
     p->left = nh;
   }
 
+  // After adding the element to normal BST, Adjust Balance factor of the newnode and up
   adjustBF(&nh);
 
+  // If adjusting Balance factor results in an imbalance node, adjust it
   AVLtree imbalnode = imbalNode(nh);
-  if (imbalnode){
+  while (imbalnode){
     adjustImbalance(t, imbalnode);
+    imbalnode = imbalNode(nh);
   }
 
 }
@@ -123,13 +126,18 @@ void adjustImbalance(AVLtree *t, AVLtree imbal){
   if (!(t))
     return;
 
+  // Checking for LL / LR / RR / RL 
+  // if the bf of imbal node is negative its a right rotation
+  // if the bf of its right child is -ve too, its Right right rotation 
+  // Else Right left
+  
+  // FOr RL, we first give LL rotation to imbal node's right node
+  // then rr on normal imbal node
   if ((imbal)->bf < -1){
     if (imbal->right && imbal->right->bf <= -1){
       rrAVL(t, imbal);
     } else {
       llAVL(t, imbal->right);
-  //    adjustBF(&imbal->right->right);
-
       rrAVL(t, imbal);
     }
   } else {
@@ -137,30 +145,34 @@ void adjustImbalance(AVLtree *t, AVLtree imbal){
       llAVL(t, imbal);
     } else {
       rrAVL(t, imbal->left);
-   //   adjustBF(&imbal->left->left);
       llAVL(t, imbal);
     }
   }
-  //adjustBF(&imbal);
 
 }
 
 void rrAVL(AVLtree *t, AVLtree p){
 
+  // right = right -> left, right -> left = root
+  // First save imbal node's parent and right child
   AVLtree aParent = p->parent;
-
   AVLtree b = p->right;
 
+  // If there's any data on imbal's right's left, its greater than imbal itself, thus, connecting it to imbal's right 
   p->right = b->left;
 
+  // connecting imbal's right as root node and imbal to the left of imbal's right
   b->left = p;
   b->parent = p->parent;
   p->parent = b;
 
+  // imbal's right that is original imbal's right's left is not null, change it's parent pointer
   if (p->right){
     p->right->parent = p;
   }
 
+  
+  // adjustBF() imbal node and up
   adjustBF(&p);
 
   if (*t == p){
@@ -176,12 +188,9 @@ void rrAVL(AVLtree *t, AVLtree p){
   }
   b->parent = aParent;
 
-
 }
 
 void llAVL(AVLtree *t, AVLtree p){
-
-
 
   AVLtree aParent = p->parent;
   AVLtree b = p->left;
