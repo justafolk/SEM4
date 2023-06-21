@@ -12,7 +12,7 @@ void displayInorder(Tree t);
 // Tree functions
 void insertBT(Tree *t, int key);
 void displayBT(Tree t);
-void searchBT(Tree t, int key);
+int searchBT(Tree t, int key);
 
 // Tree functions
 void insertBST(Tree *t, int key);

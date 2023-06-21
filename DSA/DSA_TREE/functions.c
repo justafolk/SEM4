@@ -101,4 +101,4 @@ void displayInorder(Tree t){
 	displayInorder(t->right);
 }
 
-
+void levelOrderToBT(int arr[], Tree *t)
