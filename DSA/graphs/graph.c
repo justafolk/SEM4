@@ -191,7 +191,6 @@ Sp_Tree Prims(graph G, int s){
 					if (G.A[p][j] && !visited[j]){
 						if (G.A[p][j] < min && G.A[p][j] > 0){
 							min = G.A[p][j];
-							printf("%d lol min\n", min);
 							minv = j;
 							prev_p = p;
 						}
