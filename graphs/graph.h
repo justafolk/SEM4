@@ -28,3 +28,7 @@ void DFS(graph G, int s);
 void connectedComponents(graph g);
 
 int isAdjacent(graph G, int v1, int v2);
+
+Sp_Tree Kruskals(graph G, int s);
+
+int *dijkstra(graph G, int src) ;

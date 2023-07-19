@@ -24,9 +24,17 @@ int main(){
 
   DFS(G, 0);
 
-  Sp_Tree S = Prims(G, 0);
+  printf("KRUSKALS");
+  Sp_Tree S = Kruskals(G, 0);
   printf("\n");
   displaySPtree(S, G.n);
+
+  printf("Prims\n");
+  Sp_Tree x = Prims(G, 0);
+  printf("\n");
+  displaySPtree(x, G.n);
+
+dijkstra(G, 0);
 
 	return 0;
 
